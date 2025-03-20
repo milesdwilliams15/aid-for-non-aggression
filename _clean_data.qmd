@@ -1,0 +1,307 @@
+---
+title: "Prep data for analsis"
+format: html
+---
+
+## setup
+
+```{r}
+library(tidyverse)
+library(peacesciencer)
+library(wbstats)
+library(tradestatistics)
+library(countrycode)
+```
+
+## data
+
+### base dyad-year dataset
+
+```{r}
+ddy <- create_dyadyears(
+  subset_years = 1966:2021
+)
+```
+
+### oecd aid data
+
+```{r}
+## OECD Aid Data
+## - Downloaded 05-03-2023
+## - Aid (ODA) commitments to countries and regions [DAC3a]
+## - Total commitments in 2021 US dollars
+oecd <- read_csv(
+  here::here(
+    "01_data",  
+    "oecd_oda_commitments.csv"
+  )
+)
+```
+
+```{r}
+glimpse(oecd)
+oecd %>%
+  transmute(
+    ccode1 = countrycode(
+      Donor,
+      "country.name",
+      "cown"
+    ),
+    ccode2 = countrycode(
+      Recipient,
+      "country.name",
+      "cown"
+    ),
+    year = Year,
+    oda = Value * 1e06,
+    oda = ifelse(oda < 0, 0, oda)
+  ) %>%
+  drop_na(ccode1, ccode2) -> oecd
+```
+
+```{r}
+ddy <- ddy |>
+  left_join(oecd)
+```
+
+```{r}
+ddy |>
+  filter(
+    ccode1 %in% unique(oecd$ccode1),
+    ccode2 %in% unique(oecd$ccode2)
+  ) |>
+  group_by(ccode1, year) |>
+  mutate(
+    inactive = all(is.na(oda))
+  ) |>
+  ungroup() |>
+  filter(!inactive) |>
+  select(-inactive) -> ddy
+```
+
+### alliance data
+
+```{r}
+aldt <- create_dyadyears(
+  subset_years = 1946:2018
+) |>
+  add_atop_alliance()
+```
+
+
+```{r}
+aldt <- aldt |>
+  transmute(
+    ccode1, ccode2, year,
+    defense = atop_defense, 
+    offense = atop_offense,
+    neutral = atop_neutral, 
+    nonagg = atop_nonagg, 
+    consul = atop_consul
+  ) |>
+  group_by(ccode1, ccode2) |>
+  mutate(
+    nonaggt = case_when(
+      nonagg == 1 &
+        year == min(year[nonagg == 1]) ~ 1,
+      TRUE ~ 0
+    ),
+    n1 = lag(nonaggt, 1, order_by = year),
+    n2 = lag(nonaggt, 2, order_by = year),
+    n3 = lag(nonaggt, 3, order_by = year),
+    n4 = lag(nonaggt, 4, order_by = year),
+    n5 = lag(nonaggt, 5, order_by = year)
+  ) |>
+  ungroup() 
+```
+
+
+```{r}
+ddy <- left_join(
+  ddy,
+  aldt
+)
+```
+
+### rivalry data
+
+```{r}
+rivals_ddy <- create_dyadyears() |>
+  add_strategic_rivalries()
+
+my_sum <- function(x) {
+  out <- 0
+  for(i in 1:length(x)) {
+    if(i < 10) {
+      out[i] <- sum(x[1:i], na.rm = T)
+    } else {
+      out[i] <- sum(x[(i - 9):i], na.rm = T)
+    }
+  }
+  out
+}
+
+
+rivals_ddy <- rivals_ddy |>
+  select(ccode1, ccode2, year, ongoingrivalry) |>
+  group_by(ccode1, ccode2) |>
+  mutate(
+    lag_ongoingrivalry = lag(
+      ongoingrivalry, order_by = year
+    ),
+    end_rivalry = (
+      (ongoingrivalry - lag_ongoingrivalry) < 0
+    ) + 0,
+    end_rivalry10 = my_sum(
+      end_rivalry
+    )
+  )
+
+rivals_sy <- rivals_ddy |>
+  group_by(ccode1, year) |>
+  summarize(
+    n_rivals = sum(ongoingrivalry),
+    n_end_rivalry = sum(end_rivalry, na.rm = T)
+  ) |>
+  mutate(
+    n_end_rivalry10 = my_sum(
+      n_end_rivalry
+    )
+  )
+
+ddy |>
+  left_join(
+    rivals_ddy
+  ) |>
+  left_join(
+    rivals_sy
+  ) -> ddy
+```
+
+
+### covariates
+
+```{r}
+inds <- c(
+  "gdp2015" = "NY.GDP.MKTP.KD",
+  "pop" = "SP.POP.TOTL"
+)
+
+wbdt <- wb_data(
+  indicator = inds
+)
+
+wbdt |>
+  transmute(
+    ccode2 = countrycode(
+      iso2c, "iso2c", "cown"
+    ),
+    year = date,
+    gdp2015,
+    pop
+  ) |>
+  drop_na() -> wbdt
+```
+
+```{r}
+ddy |>
+  left_join(
+    wbdt
+  ) -> ddy
+```
+
+
+
+```{r}
+ucdp <- create_stateyears(
+  system = "gw"
+) |>
+  add_ccode_to_gw() |>
+  add_ucdp_acd()
+
+ucdp |>
+  transmute(
+    ccode2 = ccode,
+    year,
+    ucdp_conflict = case_when(
+      maxintensity >= 1 ~ 1,
+      TRUE ~ 0
+    ),
+    ucdp_war = case_when(
+      maxintensity > 1 ~ 1,
+      TRUE ~ 0
+    )
+  ) -> ucdp
+```
+
+
+```{r}
+ddy |>
+  left_join(
+    ucdp
+  ) -> ddy
+```
+
+```{r}
+attributes(ddy)$ps_data_type <- "dyad_year"
+attributes(ddy)$ps_system_type <- "cow"
+ddy |>
+  add_minimum_distance() |>
+  add_cow_trade() |>
+  add_fpsim(keep = "kappavv") |>
+  add_democracy() -> ddy
+```
+
+```{r}
+ddy <- ddy |>
+  group_by(ccode1, ccode2) |>
+  mutate(
+    mindist = max(mindist, na.rm = T)
+  )
+```
+
+### check for duplicates
+
+```{r}
+nrow(ddy) 
+ddy |>
+  distinct() |>
+  nrow()
+```
+
+```{r}
+ddy <- ddy |>
+  distinct()
+```
+
+Double check:
+
+```{r}
+ddy |>
+  group_by(ccode1, ccode2, year) |>
+  count() |>
+  arrange(-n)
+```
+
+
+### alliance data only goes to 2018
+
+```{r}
+ddy <- ddy |>
+  filter(year <= 2018)
+```
+
+
+
+## Save
+
+```{r}
+write_csv(
+  ddy,
+  here::here(
+    "01_data",
+    "full_analysis_data.csv"
+  )
+)
+```
+

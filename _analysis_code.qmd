@@ -1,0 +1,629 @@
+---
+title: "Analysis"
+format: html
+---
+
+## setup
+
+```{r}
+library(tidyverse)
+library(socsci)
+library(mgcv)
+library(sandwich)
+library(coolorrr)
+library(sjPlot)
+library(ggregtab)
+library(here)
+coolorrr::set_theme()
+set_palette()
+
+saveit <- function(name = "fig", ht = 4, wd = 6) {
+  ggsave(
+    here(
+      "03_figures",
+      paste0(name, ".png")
+    ),
+    dpi = 500,
+    height = 4,
+    width = 6
+  )
+}
+```
+
+
+## data
+
+```{r}
+main_dt <- read_csv(
+  here(
+    "01_data",
+    "full_analysis_data.csv"
+  )
+)
+
+library(peacesciencer)
+alliance_dyad_dt <- create_dyadyears(
+  subset_years = 1946:2018
+) |>
+  add_atop_alliance()
+
+```
+
+
+## descriptives
+
+```{r}
+main_dt$ccode1 |> unique() |> length()
+main_dt$ccode2 |> unique() |> length()
+```
+
+
+```{r}
+#| fig-height: 4
+#| fig-width: 6
+
+## make a figure of no. of countries joining different alliance types over time
+alliance_dyad_dt |>
+  filter(year > 1945) |>
+  group_by(year, ccode1) |>
+  summarize(
+    across(
+      atop_defense:atop_consul,
+      max
+    )
+  ) |>
+  group_by(year) |>
+  summarize(
+    across(atop_defense:atop_consul, mean)
+  ) |>
+  pivot_longer(
+    -year
+  ) |>
+  mutate(
+    name = rep(
+      c("Defense", "Offense", "Neutrality", 
+        "Non-aggression", "Consultation"),
+      len = n()
+    )
+  ) |>
+  ggplot() +
+  aes(year, value, color = name) +
+  geom_line(
+    linewidth = 1
+  ) +
+  labs(
+    caption = str_wrap(
+      "Figure 1: Share of countries that are involved in one of five alliance types included in the ATOP dataset, 1946-2018."
+    ),
+    x = NULL,
+    y = NULL,
+    color = NULL
+  ) +
+  theme(
+    plot.caption = element_text(
+      size = 12,
+      hjust = 0
+    ),
+    plot.caption.position = "plot",
+    legend.position = "right",
+    legend.direction = "vertical"
+  ) +
+  ggpal() +
+  scale_y_continuous(
+    labels = scales::percent,
+    limits = 0:1
+  )
+saveit("fig1")
+```
+
+```{r}
+#| fig-height: 4
+#| fig-width: 6
+
+alliance_dyad_dt |>
+  filter(ccode1 > ccode2) |>
+  group_by(year) |>
+  summarize(
+    across(atop_defense:atop_consul, mean)
+  ) |>
+  pivot_longer(
+    -year
+  ) |>
+  mutate(
+    name = rep(
+      c("Defense", "Offense", "Neutrality", 
+        "Non-aggression", "Consultation"),
+      len = n()
+    )
+  ) |>
+  ggplot() +
+  aes(year, value, color = name) +
+  geom_line(
+    linewidth = 1
+  ) +
+  labs(
+    caption = str_wrap(
+      "Figure 2: Alliance membership rate per dyad based on five alliance types included in the ATOP dataset, 1946-2018."
+    ),
+    x = NULL,
+    y = NULL,
+    color = NULL
+  ) +
+  theme(
+    plot.caption = element_text(
+      size = 12,
+      hjust = 0
+    ),
+    plot.caption.position = "plot",
+    legend.position = "right",
+    legend.direction = "vertical"
+  ) +
+  ggpal() +
+  scale_y_continuous(
+    labels = scales::percent
+  )
+saveit("fig2")
+
+```
+
+
+
+```{r}
+#| fig-height: 4
+#| fig-width: 6
+
+main_dt |>
+  group_by(year) |>
+  summarize(
+    across(defense:consul, mean)
+  ) |>
+  pivot_longer(
+    -year
+  ) |>
+  mutate(
+    name = rep(
+      c("Defense", "Offense", "Neutrality", 
+        "Non-aggression", "Consultation"),
+      len = n()
+    )
+  ) |>
+  ggplot() +
+  aes(year, value, color = name) +
+  geom_line(
+    linewidth = 1
+  ) +
+  labs(
+    caption = str_wrap(
+      "Figure 3: Alliance membership rate per foreign aid donor-recipient dyad based on five alliance types included in the ATOP dataset, 1966-2018."
+    ),
+    x = NULL,
+    y = NULL,
+    color = NULL
+  ) +
+  theme(
+    plot.caption = element_text(
+      size = 12,
+      hjust = 0
+    ),
+    plot.caption.position = "plot",
+    legend.position = "right",
+    legend.direction = "vertical"
+  ) +
+  ggpal() +
+  scale_y_continuous(
+    labels = scales::percent
+  )
+saveit("fig3")
+```
+
+```{r}
+alliance_dyad_dt |>
+  left_join(
+    main_dt |>
+      select(ccode1, ccode2, year) |>
+      mutate(
+        dac = 1
+      )
+  ) |>
+  left_join(
+    main_dt |>
+    select(ccode1, ccode2, year) |>
+      mutate(
+        dac = 1
+      ),
+    by = c("year", "ccode1" = "ccode2", "ccode2" = "ccode1")
+  ) |>
+  mutate(
+    dac = case_when(
+      dac.x == 1 ~ 1,
+      dac.y == 1 ~ 1,
+      TRUE ~ 0
+    )
+  ) |>
+  filter(ccode1 > ccode2, year >= 1966) |>
+  group_by(year) |>
+  summarize(
+    across(
+      atop_defense:atop_consul,
+      sum,
+      .names = "{.col}_sum"
+    ),
+    across(
+      atop_defense:atop_consul,
+      ~ sum(.x[dac == 1]),
+      .names = "{.col}_dac"
+    )
+  ) |>
+  mutate(
+    def_dac = atop_defense_dac / atop_defense_sum,
+    off_dac = atop_offense_dac / atop_offense_sum,
+    neu_dac = atop_neutral_dac / atop_neutral_sum,
+    non_dac = atop_nonagg_dac / atop_nonagg_sum,
+    con_dac = atop_consul_dac / atop_consul_sum
+  ) |>
+  pivot_longer(
+    def_dac:con_dac
+  ) |>
+  mutate(
+    name = rep(
+      c("Defense", "Offense", "Neutrality", 
+        "Non-aggression", "Consultation"),
+      len = n()
+    )
+  ) |>
+  ggplot() +
+  aes(year, value, color = name) +
+  geom_line(
+    linewidth = 1
+  ) +
+  labs(
+    caption = str_wrap(
+      "Figure x: Alliance membership rate per foreign aid donor-recipient dyad based on five alliance types included in the ATOP dataset, 1966-2018."
+    ),
+    x = NULL,
+    y = NULL,
+    color = NULL
+  ) +
+  theme(
+    plot.caption = element_text(
+      size = 12,
+      hjust = 0
+    ),
+    plot.caption.position = "plot",
+    legend.position = "right",
+    legend.direction = "vertical"
+  ) +
+  ggpal() +
+  scale_y_continuous(
+    labels = scales::percent
+  )
+  
+```
+
+```{r}
+main_dt |>
+  filter(year == 2018) |>
+  group_by(ccode1) |>
+  summarize(
+    def = sum(defense),
+    non = sum(nonagg)
+  ) |> 
+  mutate(
+    ccode1 = countrycode::countrycode(
+      ccode1, "cown", "country.name"
+    )
+  ) |> view()
+```
+
+
+
+## regression analysis
+
+```{r}
+main_dt$dyadnum <- paste0(
+  main_dt$ccode1,
+  main_dt$ccode2
+) |> as.numeric()
+
+fit1 <- gam(
+  oda ~ 
+    nonagg +
+    s(year) +
+    s(dyadnum, bs = "re"),
+  data = main_dt |> 
+    filter(year > 1990) |>
+    mutate(nonagg = ifelse(
+      nonagg == 1, "Yes", "No"
+    )),
+  family = quasipoisson
+)
+fit2 <- gam(
+  oda ~ 
+    nonagg +
+    defense +
+    asinh(flow1) + 
+    asinh(flow2) +
+    asinh(mindist) +
+    kappavv +
+    asinh(gdp2015) +
+    asinh(pop) +
+    ucdp_war +
+    v2x_polyarchy2 +
+    s(year) +
+    s(dyadnum, bs = "re"),
+  data = main_dt |> 
+    filter(year > 1990) |>
+    mutate(nonagg = ifelse(
+      nonagg == 1, "Yes", "No"
+    )),
+  family = quasipoisson
+)
+fit3 <- gam(
+  oda ~ 
+    nonagg +
+    s(year, by = nonagg) +
+    defense +
+    asinh(flow1) + 
+    asinh(flow2) +
+    asinh(mindist) +
+    kappavv +
+    asinh(gdp2015) +
+    asinh(pop) +
+    ucdp_war +
+    v2x_polyarchy2 +
+    s(dyadnum, bs = "re"),
+  data = main_dt |> 
+    filter(year > 1990) |>
+    mutate(nonagg = ifelse(
+      nonagg == 1, "Yes", "No"
+    ) |> as.factor()),
+  family = quasipoisson
+)
+```
+
+### Regression table
+
+```{r}
+#| fig-height: 6
+#| fig-width: 6
+coef_map <- c(
+      "V-Dem",
+      "UCDP War",
+      "Population (asinh)",
+      "GDP (asinh)",
+      "Alignment (UN vote)",
+      "Distance (asinh)",
+      "Exports (asinh)",
+      "Imports (asinh)",
+      "Defense Treaty",
+      "Non-aggression Treaty"
+    )
+bind_rows(
+    tidy_coeftest(
+      fit1, 
+      model = "(1)\nBase\n"
+    ),
+    tidy_coeftest(
+      fit2, 
+      model = "(2)\n+ Controls\n"
+    ),
+    tidy_coeftest(
+      fit3, 
+      model = "(3)\n+ Time\nInteraction"
+    )
+  ) |>
+  filter(
+    !str_detect(term, "s\\(year\\)"),
+    !str_detect(term, "s\\(dyadnum\\)"),
+    term != "(Intercept)"
+  ) |>
+  ggregtab(
+    ratio = .5
+  ) +
+  scale_y_discrete(
+    labels = coef_map
+  ) +
+  labs(
+    subtitle = str_wrap(
+      "Table 1: PPML model estimates. Models include a generalized additive smoother for time and random dyad intercepts (not shown).",
+      width = 65
+    )
+  ) +
+  theme(
+    plot.subtitle = element_text(
+      size = 12
+    )
+  )
+```
+
+### Prediction plot for non-aggression
+
+```{r}
+#| fig-height: 4
+#| fig-width: 6
+
+plot_model(
+  fit2,
+  type = "pred",
+  terms = "nonagg",
+  ci.lvl = .834
+) +
+  labs(
+    y = "ODA Commitments",
+    x = "Non-aggression Pledge?",
+    caption = str_wrap(
+      "Figure 4: Expected ODA between donor-recipient pairs in millions predicted by non-aggression pledges. Predictions based on Model (2) in Table 1. 83.4% CIs shown, which provide the appropriate coverage for a test of non-overlap at the 95% level.",
+      width = 70
+    ),
+    title = NULL
+  ) +
+  scale_y_continuous(
+    labels = ~ paste0("$", .x / 1e06, " mil")
+  ) +
+  theme(
+    plot.caption = element_text(
+      hjust = 0,
+      size = 12
+    ),
+    plot.caption.position = "plot",
+    axis.title = element_text(
+      hjust = .5
+    )
+  ) 
+saveit("fig4")
+```
+
+### Unadjusted trend by non-aggression
+
+```{r}
+#| fig-height: 4
+#| fig-width: 6
+main_dt |>
+  mutate(
+    nonagg = ifelse(
+      nonagg == 1,
+      "Yes",
+      "No"
+    )
+  ) |>
+  filter(year > 1990) |>
+  ggplot() +
+  aes(
+    x = year,
+    y = oda,
+    color = nonagg,
+    fill = nonagg
+  ) +
+  stat_smooth(
+    method = "gam",
+    method.args = list(
+      family = quasipoisson
+    ),
+    level = 0.834
+  ) +
+  ggpal("binary") +
+  ggpal("binary", "fill") +
+  labs(
+    y = "ODA Commitments",
+    x = NULL,
+    color = "Non-aggression?",
+    fill = "Non-aggression?",
+    caption = str_wrap(
+      "Figure 5: Unadjusted yearly trend in ODA between donor-recipient pairs in millions. 83.4% CIs shown, which provide the appropriate coverage for a test of non-overlap at the 95% level.",
+      width = 70
+    )
+  ) +
+  scale_x_continuous(
+    breaks = seq(1990, 2020, by = 5)
+  ) +
+  scale_y_continuous(
+    labels = ~ paste0("$", .x / 1e06, " mil")
+  ) +
+  theme(
+    plot.caption = element_text(
+      hjust = 0,
+      size = 12
+    ),
+    plot.caption.position = "plot"
+  )
+saveit("fig5")
+```
+
+
+### Adjusted trend by non-aggression
+
+```{r}
+#| fig-height: 4.5
+#| fig-width: 6
+
+plot_model(
+  fit3,
+  type = "pred",
+  terms = c("year", "nonagg"),
+  ci.lvl = .834
+) +
+  ggpal(
+    "binary",
+    labels = c("No", "Yes")
+  ) +
+  ggpal(
+    "binary", 
+    "fill",
+    labels = c("No", "Yes")
+  ) +
+  labs(
+    x = NULL,
+    y = "Predicted ODA",
+    color = "Non-aggression?",
+    fill = "Non-aggression?",
+    title = NULL,
+    caption = str_wrap(
+      "Figure 6: Expected yearly trend in ODA in millions between donor-recipient pairs based on non-aggression pledges. Predictions are based on Model (3) in Table 1. 83.4% CIs shown, which provide the appropriate coverage for a test of non-overlap at the 95% level.",
+      width = 70
+    )
+  ) +
+  scale_x_continuous(
+    breaks = seq(1990, 2015, by = 5)
+  ) +
+  scale_y_continuous(
+    labels = ~ paste0("$", .x / 1e06, " mil")
+  ) +
+  theme(
+    plot.caption = element_text(
+      size = 12,
+      hjust = 0
+    ),
+    plot.caption.position = "plot"
+  )
+saveit("fig6", 4.5)
+```
+
+## Robustness
+
+### Non-aggression lags
+
+```{r}
+#| fig-height: 6
+#| fig-width: 6
+
+fit4 <- gam(
+  asinh(oda) ~ 
+    nonagg +
+    defense +
+    asinh(flow1) + 
+    asinh(flow2) +
+    asinh(mindist) +
+    kappavv +
+    asinh(gdp2015) +
+    asinh(pop) +
+    ucdp_war +
+    v2x_polyarchy2 +
+    as.factor(year) +
+    as.factor(dyadnum),
+  data = main_dt |> 
+    filter(year > 1990)
+)
+
+tidy_coeftest(fit4, model = "Model 5")[2:7, ] |>
+  ggregtab() +
+  scale_y_discrete(
+    labels = c("t - 5", "t - 4", 
+      "t - 3", "t - 2",
+      "t - 1", "Non-aggression")
+  ) +
+  labs(
+    title = str_wrap(
+      "Table 2: PPML non-aggression estimates including up to a five year lag in non-aggression membership"
+    )
+  )
+summary(fit4)
+```
+
+```{r}
+plot_model(
+  fit4,
+  type = "pred",
+  terms = "nts"
+)
+```
+

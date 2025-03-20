@@ -1,0 +1,208 @@
+---
+bibliography: ref.bib
+title: "Aid for Non-aggression in the Post-Cold War Period"
+author: Miles D. Williams^[Denison University, Granville, OH USA. Contact at mdwilliams@denison.edu. This manuscript was prepared for the 82nd Annual Midwest Political Science Assocation Conference, April of 2025.]
+date: "April 2025"
+format: 
+  docx:
+    reference-doc: word_docx_new_template.docx
+    number-sections: false
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+execute: 
+  echo: false
+  warning: false
+  message: false
+abstract: Non-aggression pacts have become the most common kind of military alliance between industrialized and developing countries since the end of the Cold War, but the significance of these pacts for industrialized and developing country interactions remains understudied and undertheorized. Recent work in the alliance literature argues that non-aggression pacts serve a third-party signaling function. I go further and contend that material concessions help make these third-party signals credible, and that foreign aid is an important foreign policy tool that is well-suited to achieving this goal. Using dyadic panel data on aid allocations from aid donors to aid recipients in the post-Cold War period, I find evidence that donors reward aid recipient non-aggression partners with greater foreign aid. This finding is robust to controlling for a range of factors and to an interaction between non-aggression pledges and non-linear time trend. This study contributes to a large body of research demonstrating the links between the way donor countries distribute foreign aid in developing countries and their strategic interests.
+---
+
+**keywords:** Foreign Aid, Non-aggression, Donor Strategy
+
+# Introduction
+
+What role does foreign aid play in the context of non-aggression treaties? These security pacts have become increasingly common since the end of the Cold War – in fact, far more common than any other kind of treaty type according to the Alliance and Treaty Obligations and Provisions (ATOP) dataset [@leedsEtAl2002]. Despite their prevalence, they remain less studied compared to other kinds of alliances, like defensive treaties. @zhang2024does recently showed that the latter are linked with the foreign aid allocation decisions of traditional donor countries, but no research has explored the linkage between aid and other kinds of military alliances such as non-aggression pacts. There are reasons to suspect that non-aggression pacts in particular might be correlated with donor giving as well, but for very different reasons than aid is linked to defensive treaties.
+
+@mattes2010 found that non-aggression pacts predict greater peace among signatories, which makes sense, given that these agreements commit members against using force on one another. But more recently, @lupuPoast2016 proposed and tested a different argument about the function of non-aggression pacts – one that might imply a special role for foreign aid. @lupuPoast2016 make the case that non-aggression treaties are much less about ensuring peace among signatories than they are about *signaling* peace to third parties. Their argument is that countries that wish to cease hostilities toward each other know that this is their intention. So why sign a non-aggression pact? The reason is that this information held by the former rivals is private and may not be obvious to other countries. Signing a non-aggression treaty is for the benefit of onlookers, providing assurances that the threat of conflict between the signatories is abated.
+
+This study seeks to probe a possible implication that follows from the theory presented by @lupuPoast2016. If non-aggression pacts signal peace for the benefit of third parties, might this signal be enhanced by credible commitments like foreign aid? Aid has long served as a tool of foreign policy for donor countries, allowing them to buy votes in the United Nations General Assembly, gain access to foreign markets for their exports, and build goodwill and soft power [@dreher2024aid]. As @zhang2024does recently showed, aid also plays a complex role in the context of defensive treaties, serving as either a complement or a substitute for military commitments depending on the security environment. Given aid's flexibility to perform a wide range of functions, it would be a natural tool for donor countries to turn to if they need a way to ensure the credibility of a non-aggression treaty.
+
+This idea is put to the test in this study using a dyadic panel dataset of 30 Development Assistance Committee (DAC) aid donor countries and 156 non-DAC aid recipient countries from 1991 to 2014. Analysis of the data supports the argument that donor countries reward non-aggression partners with greater aid. This finding is robust to the inclusion of various control variables and to a non-linear interaction between joint non-aggression membership and the yearly trend in donor giving to better control for whether secular trends in both aid and non-aggression produce a spurious positive relationship between the two over time. This finding not only shows that non-aggression pledges are relevant for aid allocation, it is consistent with Lupu and Poast's [-@lupuPoast2016] theory that non-aggression pledges function as signals of peace for third parties.
+
+This finding has special relevance in the wake of recent disruptions to the status quo in the international development regime. As of this writing, the United States has frozen nearly all foreign assistance and effectively eliminated its preeminent aid agency – the United States Agency for International Development (USAID). Accusations of rampant corruption and a disconnect between U.S. foreign assistance and its national interests were the pretext for this policy move. Many other traditional DAC donors are also set to slash their aid budgets this year.[^1] While this study cannot speak to the impact of foreign aid on recipients, or its abuses, it does address the claim that aid is not given in ways consistent with U.S. interests. The results of this study contribute to a large body of literature on the links between donor country objectives and the way they distribute foreign aid across developing countries. This scholarship shows overwhelmingly that aid dollars are distributed according donor countries' security and economic goals – see @dreher2024aid for a comprehensive survey of relevant studies. Consistent with this body of work, this study shows that aid is given in ways that are consistent with donor objectives to signal credible commitments to non-aggression, which can be incredibly important for maintaining stability and reducing uncertainty about the health of the relationship between signatories. Documenting the role of foreign aid in facilitating this, and a wide range of security and soft power goals, is a necessary step if the breach between reality and recent political rhetoric is to filled.
+
+[^1]: See "Burden-shedding: the unravelling of the OECD aid consensus," published March 7, 2025 (accessed March 8, 2025): <https://devpolicy.org/burden-shedding-the-unravelling-of-the-oecd-aid-consensus-20250307/>.
+
+The paper proceeds as follows. First, descriptive analysis of the trends in non-aggression and defensive pacts over time is presented. The data clearly shows non-aggression pacts playing a more prominent role in international politics starting in the 1990s and onward. Next, the theoretical function of non-aggression pacts is discussed, and the argument for the role of aid in the context of these treaties is laid out. Data and methods for testing this argument are then summarized, followed by a presentation of the results. The paper concludes with a discussion of the findings, limitations, and suggestions for ways future research might build on the work presented here.
+
+# Non-aggression on the Rise
+
+There are five types of alliance pledges coded in the ATOP database [@leedsEtAl2002]. These include defensive, offensive, neutrality, non-aggression, and consultation pledges. Each involves substantively different commitments between signatories. Defensive pacts are promises to provide military assistance in the event that an ally is attacked, while offensive pacts are promises to provide military aid in the event that a partner attacks another country. These are the most substantive commitments out of the five. The others ask much less of allies. Neutrality pledges commit members to non-intervention in the event that a partner engages in military actions against other countries, non-aggression pledges commit members against taking military action against each other, and consultation pledges commit members to consult militarily in times of crisis.
+
+Since World War II, the share of countries making these pledges has varied quite a bit. Figure 1 shows the percentage of countries making at least one of these five commitments from 1946 to 2018. Offensive and neutrality pacts are the least common, and the former have completely faded out of existence. In 1946 over 10% of countries had offensive pledges in force with at least one other country. As of the 1990s, zero countries have offensive pledges in force. Neutrality pledges have become more common, however. Up until 1990 the trend in neutrality commitments ran in parallel with offensive commitments, but in 1990 neutrality pledges made a come back and have held steady at a 20% rate going into the 21st century.
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "03_figures",
+    "fig1.png"
+  )
+)
+```
+
+Defensive, non-aggression, and consultation pledges are by far the most common. In the first decades of the Cold War about three quarters of countries were party to at least one of these pledges. Defensive and consultation pacts declined slightly then returned to the same rate, holding steady at about three fourths as of 2018. Non-aggression pacts, however, have soared. Since the turn of the century, over 90% of countries had at least one non-aggression pledge in force.
+
+These numbers are based on unilateral alliance membership, meaning they obscure how common these commitments are on a bilateral basis. Figure 2 shows the rate of joint alliance pledges by type per dyad (country pair) from 1946 to 2018. The prevalence of non-aggression pledges relative to other commitments stands out even more. Offensive and neutrality pacts are shared by a negligible number of country pairs across this whole period. The other three alliance types are far more common. In the early years of the Cold war, about 12% of country pairs had defensive, non-aggression, and consultation pledges in common. The rate for each drops to about 6% in the 1970s. Defense and consultation pacts rebound a bit in the 21st century but never exceed 10%. Non-aggression pacts, to the contrary, are held in common by 10% of dyads in the 1980s. In the 1990s and early 2000s rates increase and then explode. By 2018 almost 25% of dyads had a common non-aggression pledge in force.
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "03_figures",
+    "fig2.png"
+  )
+)
+```
+
+Clearly, non-aggression pacts play an outsized role in international politics. As Figure 3 shows, this is particularly true in the relations between industrialized country members of the DAC and over 150 non-DAC developing countries since 1966. Among this subset of country pairs, offensive and neutrality pledges are again negligible, but rates of the other alliance types also are not substantial, at least between 1966 and 1990, when all fall well below 5%. This changed for non-aggression pacts after 1990. There were two clear periods of growth. First, in the 1990s pairs of DAC and non-DAC countries with a common non-aggression pledge in force rose from about 4% to about 12%. Then, in the mid-2000s, the rate rose again; albeit at a slower pace. By 2018 about 18% of DAC and non-DAC pairs shared a common non-aggression pledge. By contrast, less than 5% of these country pairs had a defensive or consultation pledge in force by the same year.
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "03_figures",
+    "fig3.png"
+  )
+)
+```
+
+These stylized facts reveal the growing prevalence of non-aggression pledges in international politics generally, and specifically in the interactions between industrialized and developing countries. Among this subset of country pairs, non-aggression alliances far outpace other types of commitments. The next section discusses a theory of the function of non-aggression pacts that underlines the material consequences of their disproportionate prevalence among these countries – in particular, for the foreign aid commitments industrialized countries offer to developing countries when they make non-aggression pledges to each other.
+
+Prior research has already examined the significance of other alliance pledges for foreign aid. Most recently, @zhang2024does showed that top donor countries like the United States give more or less aid to recipients on the basis of defensive pledges. In particular, he showed that during periods of heightened geostrategic competition, such as the Cold War, industrialized country donors give more aid to defensive partners to offer assurances of security commitments, while they substitute defensive pledges for aid during periods of low geostrategic competition.
+
+These findings about the role of defensive alliances in the context of the aid relationships between prominent donors and recipients are important because they reveal material consequences for developing countries that join defensive alliances with industrialized countries. However, the scope of these material consequences is limited to the small subset of foreign aid donors who make defensive pledges. As already highlighted in Figure 3, less than 5% of industrialized-developing country pairs have a defensive pledge in force. When one tallies defensive pledges by donor, as of 2018 there is a clear disparity in which countries offer defensive commitments to developing countries. The U.S. stands out with pledges made to 40 developing countries. France has the second most, with pledges made to 10 developing countries. After that, the modal number of pledges is 6 per industrialized country, followed by 4. Australia, Japan, New Zealand, South Korea, and Switzerland are unique in having no defensive pledges in force with non-DAC developing countries.
+
+In contrast, non-aggression pledges are far more commonly made by industrialized DAC countries to non-DAC developing countries. As of 2018, the U.S. had non-aggression pledges with 75 non-DAC developing countries, followed by the United Kingdom, with 47 such pledges. Canada, France, and Norway each made pledges to 44 developing countries, and the remaining industrialized DAC countries had non-aggression pledges in force with between 20 and 25 developing countries. If non-aggression pledges, like defensive ones, have material implications for the aid that developing countries receive, the implications could be relevant for a much wider range of donor-recipient interactions.
+
+# Aid and a Multilateral Theory of Non-aggression
+
+One view of non-aggression pledges is that they are institutions that allow members to solve cooperation problems [@long2007; @mattes2010], particularly to reduce the odds of future conflict [@long2007; @mattes2010; @warren2016]. @lupuPoast2016 recently questioned this view, noting that formal agreements are far from necessary for cooperation [@smith1995alliance; @morrow2000alliances]. Indeed, many countries that maintain peaceful relations do not make formal non-aggression pledges.
+
+Instead, @lupuPoast2016 propose an alternative theory of non-aggression pacts centered on the role of private information. They make the observation that "\[l\]eaders of states emerging from a rivalry know something other actors may not: that the future likelihood of conflict among the former rivals has significantly decreased" [@lupuPoast2016, 345]. Non-aggression pledges are argued to solve this problem because they are a visible act that can assure third parties that countries with a once high propensity to fight now are less likely to do so.
+
+@lupuPoast2016 hypothesize that, if their argument is true, groups of two or more states with a recently ended rivalry are more likely to make non-aggression pledges. They test this theory using a $k$-adic research design where a $k$-ad is a unit of observation with $k \geq 2$ members, and they predict that $k$-ads with a higher density of ended rivalries (in the last 10 years) are more likely to form non-aggression pacts. This is exactly what they find in their data. Using a Cox proportional hazard model and controlling for a number of factors, @lupuPoast2016 find that "going from no rivalry cessations to a *Rivalry cessation density* of 1 will result in a 416% increase in the probability of non-aggression pact formation" (354). Their *Rivalry cessation density* measure is the ratio of rivalries that have ended in a $k$-ad to the total number of possible dyads (pairs of countries that could potentially have a rivalry) in the group.
+
+In this paper, the goal is to assess whether additional predictions consistent with Lupu and Poast's [@lupuPoast2016] theory are supported by the data. If they are, this only bolsters the credibility of their argument. If not, this may generate new questions about the signalling function of non-aggression pledges.
+
+The additional prediction that is the focus of this paper centers on the role that foreign aid may play in non-aggression pact formation. The logic of the argument follows naturally from the basic assertions made by @lupuPoast2016, namely, that the goal of non-aggression pacts is to signal peaceful relations among members to third parties. However, here the argument is take further to consider whether non-aggression pledges are sufficient to signal peace.
+
+The subject of credible signals has concerned international relations scholars for some time. In their summary of the vast literature on foreign policy signals, @gartzke2017signaling note that signalling is usually studied in the context of the bargaining theory of war – that is, zero-sum bilateral conflict. But the theory @lupuPoast2016 put forward is multilateral and positive sum. The actors involved in signing a non-aggression pledge have intentions to maintain bilateral peace, but they need to assure other actors that this is the case. This signalling is relevant for other actors because whether former rivals are still rivals or not will shape other countries' policies toward them. For example, trade or military cooperation with a pair of former rivals will have different expected payoffs for other actors if the pair of countries in question are at peace or on the brink of war.
+
+As @gartzke2017signaling further explain, signals must be both purposive and strategic. In the first case, this implies that recipients of the signal interpret a massage from it. In the second case, the message should change the expected payoffs of the actors receiving the message. Thus, if a signal neither communicates a message to other actors, nor changes their expected payoffs, then it is not a signal at all.
+
+The concepts of "cheap talk" and "costly signals" are relevant for understanding when the intention to signal actually produces one. If other countries interpret an action as cheap talk, then the attempted signal has failed to convince them that anything has changed. Costly signals, however, provide a more powerful way to send a signal. These usually involve material commitments made by the signalling actor.
+
+@gartzke2017signaling highlight two key means of generating a costly signal. One is "tying hands." This idea sometimes is related to audience costs – say a country's leader makes some domestic commitments that then make it harder for the leader to change course. The other is "sinking costs." This involves engaging in materially costly activities to make a signal credible – say a country threatens a neighbor and mobilizes its military to make this threat convincing.
+
+In the context of non-aggression pacts, the goal is to send a message to third parties that also is of material consequence to them about the likelihood of conflict between the pair of countries signing the agreement. The proposition made here is that a non-aggression pact alone may not be sufficient to convince third parties that the chances of conflict have declined. That is, the non-aggression pledge might be interpreted as cheap talk. If this is the case, the countries pledging non-aggression need a way to make their new shared alliance a costly signal.
+
+Other research has recently explored the role of foreign aid in cementing alliance commitments – defensive alliances in particular [@zhang2024does]. While this research suggests aid serves a nuanced role with respect to defensive pledges, in certain situations the claim is made that aid is a costly signal of the donor's commitment to assist an ally if they are attacked. In short, it is a means of "sinking costs," akin to mobilizing forces in a situation where a country seeks to make a credible threat to attack another country.
+
+Foreign aid is a reasonable foreign policy instrument that countries might turn to in the context of non-aggression pledges as well. Aid, after all, is an expression of bilateral cooperation and exchange between the aid donor and the aid recipient. In their well cited study of foreign aid allocation, @bdms2009 make the case that foreign aid is part of a positive sum exchange between donors and recipients – donors offer a recipient aid, and in exchange the recipient makes policy concessions alinged with the interests of the donor. If a pair of countries are willing to make this exchange, which has material costs if the exchange isn't fulfilled, this implies mutual trust.
+
+In sum, the logic connecting foreign aid to non-aggression is as follows. Countries signing a non-aggression pledge need to signal their commitment to peace to other actors. To ensure that this signal is credible, the new non-aggression partners need to engage in a costly signal of bilateral cooperation, lest third parties assume the non-aggression pledge is cheap talk. Foreign aid is a well known means of positive sum foreign policy exchange between aid donors and aid recipients, and it thus is a way for non-aggression partners to send a costly signal of their commitment to cooperation and peace. If this argument is true, this implies the following hypothesis:
+
+-   *Hypothesis*: All else equal, foreign aid donors will give more foreign aid to recipients with whom they make non-aggression pledges.
+
+The next section introduces the data and research design used to test this hypothesis.
+
+# Data and Design
+
+To test the argument that aid recipients get more foreign aid from aid donors with which they share a non-aggression pledge, an original dataset of donor-recipient pairs was constructed covering the years 1991 to 2018. Donor countries included in the sample are the 30 Development Assistance Commitee (DAC) members of the Organization for Economic Cooperation and Development (OECD), and recipient countries include up to 154 low- and middle-income countries recorded as aid recipients in the OECD's database.
+
+The outcome variable, aid flows between donors and recipients, is measured in 2021 constant U.S. dollars and reflects total bilateral commitments of official development assistance (ODA) promised by donors to recipients in a given year. Commitments are used instead of disbursements since the former are an up-to-date reflection of donor policy while the latter may lag behind commitments by several years. The data was pulled from *OECD.stat*, table DAC3a.
+
+Non-aggression pledges between donors and recipients is the explanatory variable of interest. It is coded as a "0" or a "1" depending on whether, according to the ATOP dataset, a donor-recipient pair had at least one non-aggression pact in force in a given year [@leedsEtAl2002].
+
+To model the relationship between aid and non-aggression, two alternative model specifications are considered. The first is represented as the following Poisson model:
+
+$$
+\mu_{ijt} = \exp\{ \alpha_{ij} + s(t) + \beta \text{Nonagg}_{ijt} + \gamma ^\top X_{ijt}\}
+$$ {#eq-model1}
+
+The expected value ($\mu$) of ODA commitments from a donor $i$ to recipient $j$ in year $t$ is modeled as a function of whether there is a non-aggression pledge in force between $i$ and $j$ along with random donor-recipient intercepts ($\alpha_{ij}$) to adjust for between-dyad heterogeneity and within-dyad dependence in aid flows, a non-linear time trend ($s(t)$), and a vector of control variables ($X_{ijt}$). A Poisson model is used as a convenient way to handle censoring in aid commitments which are restricted to non-negative values, and the pseudo-Poisson maximum likelihood (PPML) estimator is used, which is robust to distributional assumptions about the variance of the outcome [@silvaTenreyro2006].
+
+A secondary model specification is considered, which is an extension of the first:
+
+$$
+\mu_{ijt} = \exp\{ \alpha_{ij} + s(t, \text{Nonagg}_{ijt}) + \beta \text{Nonagg}_{ijt} + \gamma ^\top X_{ijt}\}
+$$ {#eq-model2}
+
+To adjust for potentially time-varying correspondence between non-aggression and aid, the smoothed non-linear time trend is interacted with non-aggression pledges, giving two alternative yearly trends in aid to recipients as a function of alliance membership. This modeling strategy is intended to more convincingly rule out the possibility that a positive relationship between aid and non-aggression is spurious, being driven by secular upward trends both in aid commitments and in the prevalence of non-aggression pledges over time. It also helps to more transparently show whether a boost in aid to non-aggression partners is time-dependent or more general.
+
+As noted, both models include a vector of control variables. These are intended to adjust for potential confounders and to improve precision. They include ATOP coded defensive pledges between donors and recipients [@leedsEtAl2002], World Bank estimates of aid recipient GDP and population, whether there is an ongoing armed conflict involving an aid recipient [@gleditschEtAl2002; @pettersson2019ov], the minimum distance between a donor and recipient [@schvitz2022mis; @weidmanngleditsch2010mmcs], bilateral imports and exports [@barbieri2009trading], foreign policy similarity based on United Nations voting data [@bailey2017], and recipient quality of democracy as measured by the Varieties of Democracy Project [@coppedge2020v]. GDP, population, trade, and distance were normalized using the inverse hyperbolic sine. This was done instead of the natural log to preserve zero values in trade and distance. While GDP and population have no zero values, the inverse hyperbolic sine was used for these as well to maintain consistency. This makes very little difference since for very large values, the inverse hyperbolic sine is approximately equivalent to the natural log [@bw2020].
+
+Many of these variables (including alliance data) were accessed and incorporated into the final dataset using the `{peacesciencer}` R package [@miller2022]. While aid and alliance data cover the whole time-series from 1991 to 2018, trade data stops in 2014. So, once control variables are included in the analysis, coverage only runs up to 2014.
+
+# Analysis
+
+The argument made here is that foreign aid is a tool that non-aggression allies use to credibly signal to third parties that the likelihood of conflict between the pair has declined. If true, aid recipients should receive more foreign aid from donors that they share a non-aggression pact with, all else equal. This hypothesis is supported by data, as shown in Table 1 which reports PPML estimates for non-aggression pacts along with model covariates for the two specifications discussed in the previous section. It also includes a simplified model that includes only the non-aggression pledge indicator along with a smoothed time trend and random donor-recipient intercepts. In all three specifications, the non-aggression term is positive and statistically significant.
+
+![](images/clipboard-3088068371.png)
+
+In the base model (1), the PPML estimate for non-aggression is 0.55 and significant at the $p < 0.001$ level. Once control variables are included, the estimate shrinks to about a fifth the magnitude (0.127) and is significant at the $p < 0.01$ level. In the third model, the estimate increases slightly (0.195) and is significant at the $p < 0.001$ level, however this estimate should be interpreted with caution since it is only the main non-aggression term. In Model (3) non-aggression has also been interacted with the non-linear time trend.
+
+To better show what the PPML estimates imply for the substantive relationship between non-aggression and aid commitments, Figure 4 reports conditional predicted values of bilateral ODA in millions of U.S. dollars based on non-aggression pledges. Reported values are based on Model (2) from Table 1, holding all other model covariates fixed and their mean. 83.4% confidence intervals (CIs) are shown since these are consistent with a test of non-overlap at the 95% level [@knol2011mis]. The simulated predictions show that for a recipient that receives about 74 million U.S. dollars in aid, joining a non-aggression alliance with a donor will earn it about 10 million U.S. dollars extra. That is about a 13.5% increase in ODA, which is a substantial boost in aid.
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "03_figures",
+    "fig4.png"
+  )
+)
+```
+
+Model (2) assumes that non-aggression pledges have a constant relationship with ODA over time; however, it is possible that the need to signal bilateral peace to third parties varies across time. This idea is supported by a descriptive look at the data, shown in Figure 5. Without adjusting for other factors in the data, Figure 5 reports the average smoothed trend in ODA to aid recipients from donors from 1991 to 2018. 83.4% CIs are reported to ensure they are consistent with a test of non-overlap at the 95% level. Across nearly all years in the data, aid flows between non-aggression donor-recipient pairs are consistently higher on average relative to pairs that are not non-aggression allies. However, the magnitude of this difference is not constant. It is greatest in the early 1990s before diminishing in magnitude in the late 1990s and early 2000s. The gap then widens again in the late 2000s and then remains consistent throughout the 2010s.
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "03_figures",
+    "fig5.png"
+  )
+)
+```
+
+The descriptive results in Figure 5 fail to adjust for additional confounders. Figure 6 reports the predicted level of ODA to recipients from donors across time based on Model (3) in Table 1. Recall that in this model non-aggression has been interacted with the smoothed time trend. The results show that bilateral aid between donor-recipient non-aggression allies is consistently greater than between countries that are not non-aggression allies. However, the results differ in important ways compared to the descriptive results in Figure 5.
+
+```{r}
+knitr::include_graphics(
+  here::here(
+    "03_figures",
+    "fig6.png"
+  )
+)
+```
+
+First, aid between non-aggression donor-recipient pairs is substantially higher in the early 1990s (about double) and and early 2000s (about quadruple). But, second, in the mid-1990s and from 2008 onward the difference is modest, and in the mid-2000s the estimated difference by non-aggression status flips direction (though this is not statistically significant). This finding suggests that there is some time-dependence in the role of foreign aid in the context of non-aggression pledges.
+
+# Conclusion
+
+Previous work shows that non-aggression pledges may serve as institutions that help maintain peace between allies [@long2007; @mattes2010; @warren2016]. Building on these studies, @lupuPoast2016 more recently thoerize, and find supporting evidence, that non-aggression pledges in fact are less about ensuring peace among members than they are about signalling peace to third parties.
+
+This study builds on this argument by testing whether non-aggression pledges alone are sufficient to convince third parties that the likelihood of conflict between non-aggression allies has declined. Non-aggression pledges themselves demand very little from signatories other than a promise to resolve disputes peacefully. It is possible that material concessions are required to provide additional evidence that a pair of countries is committed to peaceful cooperation.
+
+This idea is tested by looking at bilateral foreign aid commitments. Foreign aid is well known as a versatile foreign policy tool [@dreher2024aid], and in particular as a means of positive-sum cooperation between donors and recipients [@bdms2009]. As a form of cooperation, aid allocation is costly for both donor and recipient. The donor offers aid, and in exchange a recipient offers policy concessions. In this exchange, there is always a risk that the recipient will renege on its promised policy change, or that the donor will shirk its aid commitment. For this reason, bundling a non-aggression pledge with greater bilateral aid can make the pledge to non-aggression and cooperation more credible to third parties.
+
+Analysis of a donor-recipient-year dataset covering the years 1991 to 2018 supports the argument that foreign aid is used to complement non-aggression pledges. All else equal, a recipient country can expect a 13.5% boost in foreign aid from a donor country with which it shares a non-aggression pledge. Additional analysis shows that this boost may differ across time, however. An interaction between non-aggression status and a non-linear time trend shows that the expected difference in aid due to non-aggression can be as much as double to quadruple what a donor offers to a non-ally, or as little as a few percentage points. The sources of this heterogeneity are worth considering in future research, but nonetheless, the evidence overall is consistent with the argument that foreign aid is used to complement the intended signal of non-aggression pledges – that signatories are committed to peaceful cooperation and conflict resolution.
+
+This finding suggests several opportunities for future research. First, what other kinds of material concessions might non-aggression partners bundle together to make their commitment to cooperation appear credible? Foreign aid is an important foreign policy tool for accomplishing this, but countries might also consider other forms of material cooperation such as bilateral investment treaties or most favored nation status.
+
+Second, what factors might condition when non-aggression partners see foreign aid or other concessions as necessary to make their commitment to cooperate credible? As noted, the boost to aid predicted by non-aggression status is not constant across time. Some factors unique to a pair of countries or to the international system at given a point in time might make a non-aggression pledge on its own more or less credible to third parties. The idea that systemic factors condition the link between aid and other kinds of alliances, like defensive pledges, has been proposed by others [@zhang2024does], so it is certainly plausible for this to be the case with aid and non-aggression as well. It also is possible that alternative concessions might substitute for aid and even be viewed as more credible in some years relative to others. These possibilities would speak to other areas of research important to IR scholars, such as theories of foreign policy substitutability [@morganPalmer2003; @palmerEtAl2002; @palmerMorgan2006].
+
+Understanding the role that aid plays in alliance formation is particularly important as the United States engages in unprecedented cuts to its foreign aid budget and the dismantling of its foremost aid agency, the United States Agency for International Development. Many other traditional donors in Europe and elsewhere are also cutting their aid budgets. The ripple effects of these changes for non-aggression pledges, other alliances, and additional foreign policies is not yet clear. In the interim, IR scholars are well situated to document the strategic importance of foreign aid, as this study does in the context of non-aggression pledges, so that policymakers in top donor countries understand the potential costs of dispensing with this versatile foreign policy tool.
+
+# Replication Materials
+
+Analysis for this study was done using R version 4.2.1. R code and data to replicate this analysis are saved on the corresponding author's GitHub: <https://milesdwilliams15.github.io>.
+
+# References
